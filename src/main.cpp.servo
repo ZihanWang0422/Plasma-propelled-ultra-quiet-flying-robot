@@ -1,0 +1,34 @@
+#include <ESP32Servo.h>
+
+#define SERVO_PIN_1 8  // 第一个舵机的引脚
+#define SERVO_PIN_2 9  // 第二个舵机的引脚，确保这个引脚是可用的并且没有冲突
+#define MAX_WIDTH   2500
+#define MIN_WIDTH   500
+
+// 定义两个舵机对象
+Servo my_servo_1;
+Servo my_servo_2;
+
+void setup() {
+  // 分配硬件定时器
+  ESP32PWM::allocateTimer(0);
+  ESP32PWM::allocateTimer(1); // 为第二个舵机分配另一个定时器
+  
+  // 设置频率
+  my_servo_1.setPeriodHertz(50);
+  my_servo_2.setPeriodHertz(50); // 也为第二个舵机设置频率
+  
+  // 关联舵机对象与GPIO引脚，设置脉宽范围
+  my_servo_1.attach(SERVO_PIN_1, MIN_WIDTH, MAX_WIDTH);
+  my_servo_2.attach(SERVO_PIN_2, MIN_WIDTH, MAX_WIDTH); // 初始化第二个舵机
+}
+
+void loop() {
+
+  
+  // 控制第二个舵机
+  my_servo_2.write(180);
+  delay(500);
+  my_servo_2.write(0);
+  delay(500);
+}
